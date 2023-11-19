@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Plutus</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+        video {
+            position: absolute;
+            clear: both;
+            width: 70vw;
+            height: 50vh;
+            z-index: -99;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            margin: auto;
+        }
+        body{
+            font-family: 'Poppins', sans-serif;
+            background-size: 100vw 100vh;
+            color: white;
+            background-color: #262626;
+        }
+        .input-style{
+            border-radius: 50px; border: 1px solid #fbde52; background: transparent; color: #fbde52; padding: 10px; font-size: 1.5rem; outline: none; width: 100px
+        }
+        .input-style:hover{
+            border-radius: 50px; border: 1px solid #fbde52; background: #fbde52; color: #e74785; padding: 10px; font-size: 1.5rem; outline: none; width: 100px
+        }
+    </style>
+</head>
+<body>
+<div id="sponsored-background" style="position: absolute; z-index: -999; top: 0; bottom: 0; margin-top: auto; margin-bottom: auto; left: 0; width: 100vw; background-image: url('https://cdn.webrazzi.com/uploads/2015/08/getir-algida-kampanya-gorseli.jpg'); height: 100vh; background-repeat: no-repeat; background-position: center; background-size: auto 100%"></div>
+    <div style="position: absolute; top: 15px; left: 15px; background-color: rgba(0, 0, 20, 0.4); border-radius: 15px; border: 1px solid #fbde52; padding: 10px;">
+        <img src="/live.png" style="width: 50px; float: left;" alt="">
+        <span style="margin-top: 10px; float: left; color: white; font-size: 1.5rem; margin-left: 15px" id="number_of_lives">{{ lives }}</span><br style="clear: both">
+        <p>Kalan Yarışmacı Sayısı: <span id="number_of_remaining_participants">Yükleniyor...</span></p>
+    </div>
+    <div id="lose-cont" style="position:absolute; top: 0; bottom: 0; right: 0; left: 0; margin: auto; width: fit-content;height: fit-content; padding: 50px; z-index: 99; display: none">
+        <img id="lose-gif" src="/lose_life.gif" alt="">
+    </div>
+    <center style="position:absolute; top: 0; bottom: 0; right: 0; left: 0; margin: auto; width: fit-content;height: fit-content; padding: 50px; border: 1px solid #fbde52; border-radius: 15px; background-color: rgba(0, 0, 20, 0.4)" id="var-op">
+        <h1>
+            50.000₺ Büyük Ödül!
+        </h1>
+        <img id="outimg" src="/out.png" style="border-radius: 15px" alt="">
+        <br>
+        <br>
+        <form method="post" enctype="multipart/form-data" id="main-form">
+            <input name="c-code" type="text" style="border-radius: 50px; border: 1px solid #fbde52; background: transparent; color: #fbde52; padding: 10px; font-size: 1.5rem; outline: none; width: 150px; text-align: center">
+            <button onclick="postCode()" type="button" class="input-style">Devam</button>
+        </form>
+        <div id="dogru-kod" style="display: none">
+            <h1>Doğru Kodu Girdiniz!</h1>
+        </div>
+    </center>
+    <video id="ad-video" src="/ads"></video>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js" integrity="sha512-zoJXRvW2gC8Z0Xo3lBbao5+AS3g6YWr5ztKqaicua11xHo+AvE1b0lT9ODgrHTmNUxeCw0Ry4BGRYZfXu70weg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        function checkAndUpdateAd(){
+            document.getElementById("ad-video").src = "/ads" + "?" + new Date().getTime();
+            document.getElementById("ad-video").play()
+        }
+        let lives_remaining = 4;
+        localStorage.setItem("last_code", document.getElementsByName('c-code')[0].value)
+        function hideLose(){
+            document.getElementById("lose-cont").style.display = "none";
+        }
+        function continuePlay(){
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "/generate_code", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+
+            xhr.onreadystatechange = () => {
+              if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                let req_resp = JSON.parse(xhr.responseText);
+                document.getElementById("number_of_remaining_participants").innerText = req_resp["number_of_remaining_participants"];
+                if(req_resp["status"] === "New Code") {
+                    if (document.getElementById("ad-video").ended){
+                        document.getElementById("ad-video").src = "/ads" + "?" + new Date().getTime();
+                    }else{
+                        document.getElementById("ad-video").addEventListener("ended", (event) => {
+                          checkAndUpdateAd();
+                        });
+                    }
+                    document.getElementsByName('c-code')[0].value = "";
+                    let is_winner = req_resp["is_winner"];
+                    let is_failed = req_resp["is_failed"];
+                    let is_ok = req_resp["is_ok"];
+                    let req_lives_remaining = req_resp["lives_remaining"];
+                    if(req_lives_remaining < lives_remaining){
+                        lives_remaining = req_lives_remaining;
+                        if(lives_remaining<=0){
+                            document.location = '/failed'
+                        }
+                        document.getElementById("lose-gif").src = "/lose_life.gif" + "?" + new Date().getTime();
+                        document.getElementById("lose-cont").style.display = "block";
+                        var audio = new Audio('/lose.wav');
+                        audio.play();
+                        setTimeout(hideLose, 1000);
+                    }
+                    if(is_failed){
+                        document.location = '/failed';
+                    }
+                    else if(is_winner){
+                        document.location = '/won';
+                    }
+                    else{
+                        lives_remaining = req_lives_remaining;
+                        document.getElementById("main-form").style.display = "block";
+                        document.getElementById("var-op").style.opacity = 1;
+                        document.getElementById("dogru-kod").style.display = "none";
+                        document.getElementById("outimg").src = "/out.png" + "?" + new Date().getTime();
+                    }
+                    document.getElementById("number_of_lives").innerText = lives_remaining
+                }
+              }
+            };
+            xhr.send(`current_code=${localStorage.getItem("last_code")}`);
+        }
+        function postCode(){
+            document.getElementById("ad-video").controls = false;
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "/post_code", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+
+            xhr.onreadystatechange = () => {
+              if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                let req_resp = JSON.parse(xhr.responseText);
+                let req_lives_remaining = req_resp["lives_remaining"];
+
+                if(req_resp["status"] === "Success"){
+                    lives_remaining = req_lives_remaining;
+                    var audio = new Audio('/success.mp3');
+                    audio.play();
+                    document.getElementById("ad-video").play()
+                    document.getElementById("var-op").style.opacity = 0;
+                    document.getElementById("main-form").style.display = "none";
+                    document.getElementById("dogru-kod").style.display = "block";
+                    localStorage.setItem("last_code", document.getElementsByName('c-code')[0].value)
+                }else{
+                    lives_remaining = req_lives_remaining;
+                    document.getElementById("lose-gif").src = "/lose_life.gif" + "?" + new Date().getTime();
+                    document.getElementById("lose-cont").style.display = "block";
+                    var audio = new Audio('/lose.wav');
+                    audio.play();
+                    setTimeout(hideLose, 1000);
+                }
+                document.getElementById("number_of_lives").innerText = lives_remaining
+              }
+            };
+            xhr.send(`c-code=${document.getElementsByName('c-code')[0].value}`);
+        }
+        const socket = io({autoConnect: false});
+        socket.connect();
+        socket.on('new_code', function(data) {
+            continuePlay();
+        });
+    </script>
+</body>
+</html>

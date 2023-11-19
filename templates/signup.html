@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Plutus</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+        iframe { position: absolute; clear: both; width: 100vw; height: 100vh; z-index: -99; left: 0; top: 0}
+        body{
+            font-family: 'Poppins', sans-serif;
+            background-color: #262626;
+            color: white;
+        }
+        input{
+            background: transparent;
+            color: white;
+        }
+        button{
+            width: 30%; border: 1px solid rgb(200, 200, 200); border-radius: 150px; padding: 15px; font-size: 1rem; outline: none; margin-top: 10px; background: transparent; color: white;
+        }
+        button:hover{
+            background-color: white;
+            color: #262626;
+        }
+    </style>
+</head>
+<body>
+    <img src="/logo.png" alt="" style="width: 100px; position: absolute; left: 15px; top: 15px">
+    <form style="width: 50%; height: fit-content; position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: auto;" method="post" enctype="multipart/form-data">
+        <h1 style="float: left">Kayıt Ol</h1>
+        <br>
+        <br style="clear: both">
+        <input type="text" name="email" placeholder="E-Posta" style="width: 100%; border: 1px solid rgb(200, 200, 200); border-radius: 150px; padding: 15px; font-size: 1rem; outline: none;">
+        <br>
+        <input type="text" name="username" placeholder="Kullanıcı Adı" style="width: 100%; border: 1px solid rgb(200, 200, 200); border-radius: 150px; padding: 15px; font-size: 1rem; outline: none; margin-top: 10px">
+        <br>
+        <input type="password" name="password" placeholder="Şifre" style="width: 100%; border: 1px solid rgb(200, 200, 200); border-radius: 150px; padding: 15px; font-size: 1rem; outline: none; margin-top: 10px">
+        <br>
+        <button>Kayıt Ol</button>
+    </form>
+</body>
+</html>

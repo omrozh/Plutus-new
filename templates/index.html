@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Plutus</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+        iframe { position: absolute; clear: both; width: 100vw; height: 100vh; z-index: -99; left: 0; top: 0}
+        body{
+            font-family: 'Poppins', sans-serif;
+            background-color: #262626;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <img src="/logo.png" alt="" style="width: 100px; position: absolute; left: 15px; top: 15px">
+    <div style="width: 100px; position: absolute; right: 15px; top: 30px">
+        <a href="/login" style="color: white">Giriş Yap</a>
+    </div>
+    <center style="width: 70%; height: fit-content; position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: auto;">
+        <h1 style="float: left">Sırada Ne Var?</h1>
+        <br>
+        <br style="clear: both">
+        <div style="width: 100%; border: 1px solid rgb(200, 200, 200); border-radius: 150px">
+            <h1>Son çıkan kazanır - 50.000₺ Ödül</h1>
+            <p style="width:90%">Oyun çok basit, websitemizden en son çıkan sen ol; 50 bin TL'yi kap. Her 30 saniyede bir hala ekran başında olup olmadığını kontrol edeceğiz. Eğer bizimleysen oyuna devam, değilsen yandın*!</p>
+            <p>Oyunun başlamasına: <span id="countdown"></span> Kaldı!</p>
+        </div>
+        <br>
+        <div style="width: 70%; border: 1px solid rgb(220, 220, 220); border-radius: 150px; color: gray">
+            <h2>Kazandıran Düğme - 100.000₺ Ödül</h2>
+        </div>
+        <br>
+        <div style="width: 70%; border: 1px solid rgb(220, 220, 220); border-radius: 150px; color: gray">
+            <h2>Mahkumun İkilemi - 100.000₺ Ödül</h2>
+        </div>
+        <br>
+        <p>*Plutus'e davet ettiğin her arkadaşın için ekstra bir can kazanırsın. Oyuna başlamadan arkadaşlarını davet et, tek seferde yanma!</p>
+        <a href="/signup" style="color: gray;">Kayıt Ol</a>
+        <br>
+        <p style="margin-top: 50px">iletisim@plutusgames.com</p>
+    </center>
+    <script>
+        var end = new Date('01/01/2024 10:00 AM');
+
+        var _second = 1000;
+        var _minute = _second * 60;
+        var _hour = _minute * 60;
+        var _day = _hour * 24;
+        var timer;
+
+        function showRemaining() {
+            var now = new Date();
+            var distance = end - now;
+            if (distance < 0) {
+                document.location = "/gameplay"
+
+                clearInterval(timer);
+                document.getElementById('countdown').innerHTML = '0 saniye';
+
+                return;
+            }
+            var days = Math.floor(distance / _day);
+            var hours = Math.floor((distance % _day) / _hour);
+            var minutes = Math.floor((distance % _hour) / _minute);
+            var seconds = Math.floor((distance % _minute) / _second);
+
+            document.getElementById('countdown').innerHTML = days + ' gün ';
+            document.getElementById('countdown').innerHTML += hours + ' saat ';
+            document.getElementById('countdown').innerHTML += minutes + ' dakika ';
+            document.getElementById('countdown').innerHTML += seconds + ' saniye';
+        }
+
+        timer = setInterval(showRemaining, 1000);
+    </script>
+</body>
+</html>
