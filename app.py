@@ -129,7 +129,7 @@ def signup():
 
         new_user.send_verification_email()
 
-        return flask.render_template("email_verification.html")
+        return flask.render_template("please_verify_your_email.html")
 
     return flask.render_template("signup.html")
 
@@ -147,7 +147,7 @@ def verify_email():
 
     db.session.commit()
     user_by_code.send_lives_gained_mail()
-    return flask.redirect("/")
+    return flask.render_template("email_verification.html")
 
 
 @app.route("/login", methods=["POST", "GET"])
@@ -219,6 +219,7 @@ def gameplay():
 @app.route("/<filename>")
 def return_image(filename):
     return flask.send_file(filename)
+
 
 @app.route("/ads")
 def ads():

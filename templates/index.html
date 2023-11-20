@@ -14,28 +14,50 @@
             background-color: #262626;
             color: white;
         }
+        .main-rounded{
+            width: 100%; border: 1px solid rgb(200, 200, 200); border-radius: 150px;
+        }
+        .whats-next{
+            width: 70%; height: fit-content; position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: auto;
+        }
+        .next-header{
+            float: left
+        }
+        @media only screen and (max-width: 800px) {
+            .whats-next{
+                top: 400px;
+            }
+            .main-rounded{
+                border: none;
+                border-radius: 0;
+                border-bottom: 1px solid rgb(200, 200, 200);
+            }
+            .next-header{
+                float: none;
+            }
+        }
     </style>
 </head>
 <body>
     <img src="/logo.png" alt="" style="width: 100px; position: absolute; left: 15px; top: 15px">
-    <div style="width: 100px; position: absolute; right: 15px; top: 30px">
+    <div style="width: 100px; position: absolute; right: 15px; top: 30px;">
         <a href="/login" style="color: white">Giriş Yap</a>
     </div>
-    <center style="width: 70%; height: fit-content; position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: auto;">
-        <h1 style="float: left">Sırada Ne Var?</h1>
+    <center class="whats-next">
+        <h1 class="next-header">Sırada Ne Var?</h1>
         <br>
         <br style="clear: both">
-        <div style="width: 100%; border: 1px solid rgb(200, 200, 200); border-radius: 150px">
+        <div class="main-rounded">
             <h1>Son çıkan kazanır - 50.000₺ Ödül</h1>
             <p style="width:90%">Oyun çok basit, websitemizden en son çıkan sen ol; 50 bin TL'yi kap. Her 30 saniyede bir hala ekran başında olup olmadığını kontrol edeceğiz. Eğer bizimleysen oyuna devam, değilsen yandın*!</p>
             <p>Oyunun başlamasına: <span id="countdown"></span> Kaldı!</p>
         </div>
         <br>
-        <div style="width: 70%; border: 1px solid rgb(220, 220, 220); border-radius: 150px; color: gray">
+        <div style="width: 70%; color: gray"  class="main-rounded">
             <h2>Kazandıran Düğme - 100.000₺ Ödül</h2>
         </div>
         <br>
-        <div style="width: 70%; border: 1px solid rgb(220, 220, 220); border-radius: 150px; color: gray">
+        <div style="width: 70%; color: gray" class="main-rounded">
             <h2>Mahkumun İkilemi - 100.000₺ Ödül</h2>
         </div>
         <br>
