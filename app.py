@@ -220,25 +220,6 @@ def gameplay():
 def return_image(filename):
     return flask.send_file(filename)
 
-
-def update_code():
-    with app.app_context():
-        last_code_id = CurrentCode.query.order_by(desc(CurrentCode.id)).limit(1).first()
-
-        if not last_code_id.is_updated:
-            print("sse")
-            sse.publish({"status": "new_code"}, type='updates')
-        else:
-            print("sse else")
-            sse.publish({"status": "keep_alive"}, type='updates')
-        last_code_id.is_updated = True
-        db.session.commit()
-
-
-scheduler.add_job(func=update_code, trigger="interval", seconds=10)
-# scheduler.start()
-
-
 @app.route("/ads")
 def ads():
     latest_code = CurrentCode.query.order_by(desc(CurrentCode.id)).limit(1).first()

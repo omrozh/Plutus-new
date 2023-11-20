@@ -61,16 +61,6 @@
     </center>
     <video id="ad-video" src="/ads"></video>
     <script>
-        var source = new EventSource("{{ url_for('sse.stream') }}");
-        source.addEventListener('updates', function(event) {
-            let status_data = JSON.parse(event.data)["status"]
-            alert(status_data)
-            if(status_data === "new_code"){
-                checkAndUpdateAd()
-            }
-        }, false);
-
-
         function checkAndUpdateAd(){
             document.getElementById("ad-video").src = "/ads" + "?" + new Date().getTime();
             document.getElementById("ad-video").play()
@@ -167,6 +157,7 @@
             };
             xhr.send(`c-code=${document.getElementsByName('c-code')[0].value}`);
         }
+        setInterval(continuePlay, 10000);
     </script>
 </body>
 </html>
