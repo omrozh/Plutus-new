@@ -118,7 +118,7 @@
                     else{
                         lives_remaining = req_lives_remaining;
                         document.getElementById("main-form").style.display = "block";
-                        document.getElementById("var-op").style.opacity = 1;
+                        document.getElementById("var-op").style.display = "block";
                         document.getElementById("dogru-kod").style.display = "none";
                         document.getElementById("outimg").src = "/out.png" + "?" + new Date().getTime();
                     }
@@ -145,7 +145,7 @@
                     var audio = new Audio('/success.mp3');
                     audio.play();
                     document.getElementById("ad-video").play()
-                    document.getElementById("var-op").style.opacity = 0;
+                    document.getElementById("var-op").style.display = "none";
                     document.getElementById("main-form").style.display = "none";
                     document.getElementById("dogru-kod").style.display = "block";
                     localStorage.setItem("last_code", document.getElementsByName('c-code')[0].value)
