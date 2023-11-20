@@ -8,6 +8,7 @@ from sqlalchemy import desc
 from uuid import uuid4
 from flask_mail import Message, Mail
 from flask_migrate import Migrate
+from apscheduler.schedulers.background import BackgroundScheduler
 import os
 from time import time
 from flask_sse import sse
@@ -37,6 +38,7 @@ mail = Mail(app)
 login_manager = LoginManager(app)
 image = ImageCaptcha()
 
+scheduler = BackgroundScheduler(app=app)
 migrate = Migrate(app, db)
 
 
@@ -216,6 +218,13 @@ def gameplay():
 @app.route("/<filename>")
 def return_image(filename):
     return flask.send_file(filename)
+
+
+def send_sse():
+    sse.publish({"status": "test"}, type='updated_code')
+
+
+scheduler.add_job(send_sse, seconds=5)
 
 
 @app.route("/ads")

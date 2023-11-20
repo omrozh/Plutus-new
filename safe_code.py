@@ -1,5 +1,8 @@
 from app import app, CurrentCode, desc, CodeAd, image, db, User, SuccessfulCode, os, randint, sse, Timer
 
+with app.app_context():
+    sse.publish({"status": "test"}, type='updated_code')
+
 
 def check_and_update_code():
     all_ads = len(os.listdir("ads"))
@@ -39,10 +42,10 @@ def check_and_update_code():
                 if len(total_entries) == 1:
                     User.query.get(total_entries[0].user_fk).status = "Continue"
 
-            db.session.commit()
-
             print(new_code.current_code)
             sse.publish({"status": "new_code"}, type='updated_code')
+            print("sse publish")
+            db.session.commit()
     t2 = Timer(30, check_and_update_code)
     t2.start()
 

@@ -63,6 +63,7 @@
     <script>
         var source = new EventSource("{{ url_for('sse.stream') }}");
         source.addEventListener('updated_code', function(event) {
+            alert(event.data["status"])
             continuePlay()
         }, false);
 
