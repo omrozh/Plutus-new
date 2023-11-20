@@ -162,11 +162,6 @@
             };
             xhr.send(`c-code=${document.getElementsByName('c-code')[0].value}`);
         }
-        const socket = io({autoConnect: false});
-        socket.connect();
-        socket.on('new_code', function(data) {
-            continuePlay();
-        });
     </script>
 </body>
 </html>
