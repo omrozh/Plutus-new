@@ -9,6 +9,7 @@ from uuid import uuid4
 from flask_mail import Message, Mail
 from flask_migrate import Migrate
 import os
+from time import time
 from flask_sse import sse
 
 # TO DO: Implement missing templates search by .html
@@ -134,6 +135,7 @@ def check_and_update_code():
                 total_entries = SuccessfulCode.query.filter_by(current_code_fk=last_code_id).all()
 
                 for i in total_entries:
+                    print(i.user_fk)
                     User.query.get(i.user_fk).lives_remaining += 1
                     User.query.get(i.user_fk).status = "Continue"
                 if len(total_entries) == 1:
@@ -258,13 +260,6 @@ def gameplay():
     if current_user.lives_remaining <= 0:
         return flask.redirect("/failed")
     return flask.render_template("gameplay.html", lives=current_user.lives_remaining)
-
-
-@app.route("/start")
-def start():
-    if flask.request.args["code"] == "05082004Oo":
-        scheduler.start()
-    return flask.redirect("/gameplay")
 
 
 @app.route("/<filename>")
