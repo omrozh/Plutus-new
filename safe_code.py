@@ -1,4 +1,7 @@
 from app import app, CurrentCode, desc, CodeAd, image, db, User, SuccessfulCode, os, randint, sse, Timer
+from random_word import RandomWords
+
+r = RandomWords()
 
 
 def check_and_update_code():
@@ -10,7 +13,7 @@ def check_and_update_code():
 
             latest_code_ad = CodeAd.query.order_by(desc(CodeAd.id)).limit(1).first()
 
-            new_code = CurrentCode(current_code=str(randint(999999, 9999999)))
+            new_code = CurrentCode(current_code=str(r.get_random_word()))
             image.write(str(new_code.current_code), 'out.png')
             db.session.add(new_code)
             db.session.commit()
