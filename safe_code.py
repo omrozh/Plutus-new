@@ -1,8 +1,5 @@
 from app import app, CurrentCode, desc, CodeAd, image, db, User, SuccessfulCode, os, randint, sse, Timer
 
-with app.app_context():
-    sse.publish({"status": "test"}, type='updated_code')
-
 
 def check_and_update_code():
     all_ads = len(os.listdir("ads"))

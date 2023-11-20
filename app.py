@@ -222,8 +222,9 @@ def return_image(filename):
 
 
 def update_code():
-    last_code_id = CurrentCode.query.order_by(desc(CurrentCode.id)).limit(1).first()
     with app.app_context():
+        last_code_id = CurrentCode.query.order_by(desc(CurrentCode.id)).limit(1).first()
+
         if not last_code_id.updated_code:
             sse.publish({"status": "new_code"}, type='updates')
         else:
