@@ -62,10 +62,13 @@
     <video id="ad-video" src="/ads"></video>
     <script>
         var source = new EventSource("{{ url_for('sse.stream') }}");
-        source.addEventListener('updated_code', function(event) {
+        source.addEventListener('updates', function(event) {
             alert(event.data["status"])
-            continuePlay()
+            if(event.data["status"] === "new_code"){
+                continuePlay();
+            }
         }, false);
+
 
         function checkAndUpdateAd(){
             document.getElementById("ad-video").src = "/ads" + "?" + new Date().getTime();

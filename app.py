@@ -91,6 +91,7 @@ class User(db.Model, UserMixin):
 class CurrentCode(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     current_code = db.Column(db.String)
+    is_updated = db.Column(db.Boolean, default=False)
 
 
 class CodeAd(db.Model):
@@ -220,11 +221,19 @@ def return_image(filename):
     return flask.send_file(filename)
 
 
-def send_sse():
-    sse.publish({"status": "test"}, type='updated_code')
+def update_code():
+    last_code_id = CurrentCode.query.order_by(desc(CurrentCode.id)).limit(1).first()
+    with app.app_context():
+        if not last_code_id.updated_code:
+            sse.publish({"status": "new_code"}, type='updates')
+        else:
+            sse.publish({"status": "keep_alive"}, type='updates')
+        last_code_id.updated_code = True
+        db.session.commit()
 
 
-scheduler.add_job(send_sse, seconds=5)
+scheduler.add_job(func=update_code, trigger="interval", seconds=5)
+scheduler.start()
 
 
 @app.route("/ads")

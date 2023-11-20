@@ -6,7 +6,7 @@ with app.app_context():
 
 def check_and_update_code():
     all_ads = len(os.listdir("ads"))
-    print("Update code")
+
     with app.app_context():
         with app.test_request_context('/generate-code', method='GET'):
             last_code_id = CurrentCode.query.order_by(desc(CurrentCode.id)).limit(1).first()
@@ -36,15 +36,11 @@ def check_and_update_code():
                 total_entries = SuccessfulCode.query.filter_by(current_code_fk=last_code_id).all()
 
                 for i in total_entries:
-                    print(i.user_fk)
                     User.query.get(i.user_fk).lives_remaining += 1
                     User.query.get(i.user_fk).status = "Continue"
                 if len(total_entries) == 1:
                     User.query.get(total_entries[0].user_fk).status = "Continue"
 
-            print(new_code.current_code)
-            sse.publish({"status": "new_code"}, type='updated_code')
-            print("sse publish")
             db.session.commit()
     t2 = Timer(30, check_and_update_code)
     t2.start()
