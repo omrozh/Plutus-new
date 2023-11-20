@@ -144,10 +144,11 @@ def check_and_update_code():
 
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(func=check_and_update_code, trigger="interval", seconds=30)
 
 for i in scheduler.get_jobs():
     scheduler.remove_job(i.id)
+
+scheduler.add_job(func=check_and_update_code, trigger="interval", seconds=30)
 
 scheduler.start()
 
