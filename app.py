@@ -35,7 +35,7 @@ db = SQLAlchemy(app)
 mail = Mail(app)
 
 login_manager = LoginManager(app)
-image = ImageCaptcha()
+image = ImageCaptcha(fonts=["/op.ttf"])
 
 migrate = Migrate(app, db)
 
