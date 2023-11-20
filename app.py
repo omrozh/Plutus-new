@@ -10,6 +10,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 import os
 from flask_sse import sse
 from flask_socketio import SocketIO, emit
+from random import choice
 
 # TO DO: Implement missing templates search by .html
 # We will need Redis on live server otherwise sse won't work.
@@ -38,7 +39,9 @@ image = ImageCaptcha()
 
 scheduler = BackgroundScheduler(app=app)
 migrate = Migrate(app, db)
-socket = SocketIO(app)
+socket = SocketIO()
+
+socket.init_app(app, cors_allowed_origins="https://matchmasters.love")
 
 
 class User(db.Model, UserMixin):
@@ -229,6 +232,8 @@ def ads():
 
 @socket.on("text")
 def text(message):
+    colors = ["#fbde52", "FB5252FF", "52A1FBFF", "52FB69FF"]
+    message["color"] = choice(colors)
     emit("chat", message, broadcast=True)
 
 

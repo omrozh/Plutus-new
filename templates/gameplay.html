@@ -73,7 +73,7 @@
 
         socket.connect();
         socket.on('chat', function(data) {
-            let new_message = `<p style="margin-top: -5px"><span style="color: #fbde52">${data["username"]}</span>: ${data["message"]}</p>`
+            let new_message = `<p style="margin-top: -5px"><span style="color: ${data["color"]}">${data["username"]}</span>: ${data["message"]}</p>`
             document.getElementById("chat-box").innerHTML += new_message
             scrollToBottom("chat-box")
         });
