@@ -145,6 +145,7 @@ def check_and_update_code():
 
 scheduler = BackgroundScheduler()
 scheduler.add_job(func=check_and_update_code, trigger="interval", seconds=30)
+scheduler.start()
 
 
 @login_manager.user_loader
