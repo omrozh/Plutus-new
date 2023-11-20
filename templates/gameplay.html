@@ -62,6 +62,11 @@
     <video id="ad-video" src="/ads"></video>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js" integrity="sha512-zoJXRvW2gC8Z0Xo3lBbao5+AS3g6YWr5ztKqaicua11xHo+AvE1b0lT9ODgrHTmNUxeCw0Ry4BGRYZfXu70weg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
+        var source = new EventSource("{{ url_for('sse.stream') }}");
+        source.addEventListener('updated_code', function(event) {
+            continuePlay()
+        }, false);
+
         function checkAndUpdateAd(){
             document.getElementById("ad-video").src = "/ads" + "?" + new Date().getTime();
             document.getElementById("ad-video").play()

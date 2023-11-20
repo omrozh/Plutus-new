@@ -1,6 +1,3 @@
-import eventlet
-eventlet.monkey_patch(thread=True, time=True)
-
 from captcha.image import ImageCaptcha
 from random import randint
 import flask
@@ -13,10 +10,12 @@ from flask_mail import Message, Mail
 from flask_migrate import Migrate
 import os
 from flask_socketio import SocketIO, emit
+from flask_sse import sse
 
 # TO DO: Implement missing templates search by .html
+# We will need Redis on live server otherwise sse won't work.
 
-# TO DO: Implement live chat
+# TO DO: Implement live chat with socket
 
 app = flask.Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///site.db"
@@ -28,6 +27,9 @@ app.config["MAIL_PORT"] = 465
 app.config["MAIL_USE_SSL"] = True
 app.config["MAIL_PASSWORD"] = "nbvkkpvjozqcsfwz"
 
+app.config["REDIS_URL"] = "redis://localhost"
+app.register_blueprint(sse, url_prefix='/stream')
+
 db = SQLAlchemy(app)
 
 mail = Mail(app)
@@ -36,8 +38,6 @@ login_manager = LoginManager(app)
 image = ImageCaptcha()
 
 migrate = Migrate(app, db)
-
-socketio = SocketIO(app)
 
 
 class User(db.Model, UserMixin):
@@ -141,7 +141,7 @@ def check_and_update_code():
 
             db.session.commit()
 
-        emit("new_code", {"status": "new_code"}, broadcast=True)
+            sse.publish({"status": "new_code"}, type='updated_code')
 
 
 scheduler = BackgroundScheduler()
