@@ -64,9 +64,6 @@
         var source = new EventSource("{{ url_for('sse.stream') }}");
         source.addEventListener('updates', function(event) {
             alert(event.data["status"])
-            if(event.data["status"] === "new_code"){
-                continuePlay();
-            }
         }, false);
 
 
