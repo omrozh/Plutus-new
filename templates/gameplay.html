@@ -61,7 +61,8 @@
     </center>
     <script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>
     <script>
-        const socket = io({autoConnect: true});
+        const socket = io({autoConnect: false});
+        socket.connect();
         socket.on('chat', function(data) {
             let new_message = `<p style="margin-top: -5px"><span style="color: #fbde52">${data["username"]}</span>: ${data["message"]}</p>`
             document.getElementById("chat-box").innerHTML += new_message
