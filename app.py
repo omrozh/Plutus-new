@@ -9,7 +9,6 @@ from uuid import uuid4
 from flask_mail import Message, Mail
 from flask_migrate import Migrate
 import os
-from flask_socketio import SocketIO, emit
 from flask_sse import sse
 
 # TO DO: Implement missing templates search by .html
