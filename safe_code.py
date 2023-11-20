@@ -41,6 +41,7 @@ def check_and_update_code():
 
             db.session.commit()
 
+            print(new_code)
             sse.publish({"status": "new_code"}, type='updated_code')
     t2 = Timer(30, check_and_update_code)
     t2.start()
