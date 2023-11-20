@@ -275,7 +275,3 @@ def ads():
     latest_code = CurrentCode.query.order_by(desc(CurrentCode.id)).limit(1).first()
     code_ad = CodeAd.query.filter_by(code_fk=latest_code.id).first()
     return flask.send_file("ads/" + os.listdir("ads")[code_ad.ad_index])
-
-
-if __name__ == '__main__':
-    socketio.run(app, allow_unsafe_werkzeug=True)
