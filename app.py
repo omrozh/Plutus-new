@@ -3,7 +3,7 @@ from random import randint
 import flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_required, login_user, UserMixin, current_user
-from apscheduler.schedulers.background import BackgroundScheduler
+from threading import Timer
 from sqlalchemy import desc
 from uuid import uuid4
 from flask_mail import Message, Mail
@@ -90,6 +90,11 @@ class CurrentCode(db.Model):
     current_code = db.Column(db.String)
 
 
+class StartComp(db.Model):
+    id = db.Column(db.Integer)
+    can_start = db.Column(db.Boolean)
+
+
 class CodeAd(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     code_fk = db.Column(db.Integer)
@@ -141,16 +146,12 @@ def check_and_update_code():
             db.session.commit()
 
             sse.publish({"status": "new_code"}, type='updated_code')
+    t2 = Timer(30, check_and_update_code)
+    t2.start()
 
 
-scheduler = BackgroundScheduler()
-
-for i in scheduler.get_jobs():
-    scheduler.remove_job(i.id)
-
-scheduler.add_job(func=check_and_update_code, trigger="interval", seconds=30)
-
-scheduler.start()
+t = Timer(30, check_and_update_code)
+t.start()
 
 
 @login_manager.user_loader
