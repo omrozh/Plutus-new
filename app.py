@@ -225,11 +225,11 @@ def update_code():
     with app.app_context():
         last_code_id = CurrentCode.query.order_by(desc(CurrentCode.id)).limit(1).first()
 
-        if not last_code_id.updated_code:
+        if not last_code_id.is_updated:
             sse.publish({"status": "new_code"}, type='updates')
         else:
             sse.publish({"status": "keep_alive"}, type='updates')
-        last_code_id.updated_code = True
+        last_code_id.is_updated = True
         db.session.commit()
 
 
