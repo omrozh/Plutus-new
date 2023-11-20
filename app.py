@@ -40,8 +40,6 @@ scheduler = BackgroundScheduler(app=app)
 migrate = Migrate(app, db)
 socket = SocketIO(app)
 
-socket.run(app)
-
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -232,3 +230,7 @@ def ads():
 @socket.on("text")
 def text(message):
     emit("chat", message, broadcast=True)
+
+
+if __name__ == "__main__":
+    socket.run(app)
