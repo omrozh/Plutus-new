@@ -1,12 +1,15 @@
 from captcha.image import ImageCaptcha
+from random import randint
 import flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_required, login_user, UserMixin, current_user
+from threading import Timer
 from sqlalchemy import desc
 from uuid import uuid4
 from flask_mail import Message, Mail
 from flask_migrate import Migrate
 import os
+from time import time
 from flask_sse import sse
 
 # TO DO: Implement missing templates search by .html
