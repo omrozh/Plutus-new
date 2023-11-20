@@ -32,6 +32,14 @@
         .input-style:hover{
             border-radius: 50px; border: 1px solid #fbde52; background: #fbde52; color: #e74785; padding: 10px; font-size: 1.5rem; outline: none; width: 100px
         }
+        #var-op{
+            position:absolute; top: 0; bottom: 0; right: 0; left: 0; margin: auto; width: fit-content;height: fit-content; padding: 50px; border: 1px solid #fbde52; border-radius: 15px; background-color: rgba(0, 0, 20, 0.4)
+        }
+        @media only screen and (max-width: 800px) {
+            #var-op{
+                position:absolute; top: 0; bottom: 50px; right: 0; left: 0; margin: auto; width: fit-content;height: fit-content; padding: 50px; border: 1px solid #fbde52; border-radius: 15px; background-color: rgba(0, 0, 20, 0.4)
+            }
+        }
     </style>
 </head>
 <body>
@@ -44,7 +52,7 @@
     <div id="lose-cont" style="position:absolute; top: 0; bottom: 0; right: 0; left: 0; margin: auto; width: fit-content;height: fit-content; padding: 50px; z-index: 99; display: none">
         <img id="lose-gif" src="/lose_life.gif" alt="">
     </div>
-    <center style="position:absolute; top: 0; bottom: 0; right: 0; left: 0; margin: auto; width: fit-content;height: fit-content; padding: 50px; border: 1px solid #fbde52; border-radius: 15px; background-color: rgba(0, 0, 20, 0.4)" id="var-op">
+    <center id="var-op">
         <h1>
             50.000₺ Büyük Ödül!
         </h1>
