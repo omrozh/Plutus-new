@@ -1,4 +1,6 @@
-from app import app, CurrentCode, desc, CodeAd, image, db, User, SuccessfulCode, os, randint, sse, Timer
+from app import app, CurrentCode, desc, CodeAd, image, db, User, SuccessfulCode, os
+from threading import Timer
+from random import randint
 
 
 def check_and_update_code():

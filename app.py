@@ -1,17 +1,15 @@
 from captcha.image import ImageCaptcha
-from random import randint
 import flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_required, login_user, UserMixin, current_user
-from threading import Timer
 from sqlalchemy import desc
 from uuid import uuid4
 from flask_mail import Message, Mail
 from flask_migrate import Migrate
 from apscheduler.schedulers.background import BackgroundScheduler
 import os
-from time import time
 from flask_sse import sse
+from flask_socketio import SocketIO, emit
 
 # TO DO: Implement missing templates search by .html
 # We will need Redis on live server otherwise sse won't work.
@@ -40,6 +38,7 @@ image = ImageCaptcha()
 
 scheduler = BackgroundScheduler(app=app)
 migrate = Migrate(app, db)
+socket = SocketIO(app)
 
 
 class User(db.Model, UserMixin):
@@ -213,7 +212,7 @@ def post_code():
 def gameplay():
     if current_user.lives_remaining <= 0:
         return flask.redirect("/failed")
-    return flask.render_template("gameplay.html", lives=current_user.lives_remaining)
+    return flask.render_template("gameplay.html", lives=current_user.lives_remaining, username=current_user.username)
 
 
 @app.route("/<filename>")
@@ -226,3 +225,9 @@ def ads():
     latest_code = CurrentCode.query.order_by(desc(CurrentCode.id)).limit(1).first()
     code_ad = CodeAd.query.filter_by(code_fk=latest_code.id).first()
     return flask.send_file("ads/" + os.listdir("ads")[code_ad.ad_index])
+
+
+@socket.on("text")
+def text(message):
+    print(message)
+    emit("chat", message, broadcast=True)
