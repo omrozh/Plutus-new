@@ -90,11 +90,6 @@ class CurrentCode(db.Model):
     current_code = db.Column(db.String)
 
 
-class StartComp(db.Model):
-    id = db.Column(db.Integer)
-    can_start = db.Column(db.Boolean)
-
-
 class CodeAd(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     code_fk = db.Column(db.Integer)
@@ -109,6 +104,7 @@ class SuccessfulCode(db.Model):
 
 def check_and_update_code():
     all_ads = len(os.listdir("ads"))
+    print("Update code")
     with app.app_context():
         with app.test_request_context('/generate-code', method='GET'):
             last_code_id = CurrentCode.query.order_by(desc(CurrentCode.id)).limit(1).first()
