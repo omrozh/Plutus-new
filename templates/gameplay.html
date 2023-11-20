@@ -64,6 +64,7 @@
         var source = new EventSource("{{ url_for('sse.stream') }}");
         source.addEventListener('updates', function(event) {
             let status_data = JSON.parse(event.data)["status"]
+            alert(status_data)
             if(status_data === "new_code"){
                 checkAndUpdateAd()
             }
