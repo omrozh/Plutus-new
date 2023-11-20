@@ -236,7 +236,7 @@ def update_code():
 
 
 scheduler.add_job(func=update_code, trigger="interval", seconds=10)
-scheduler.start()
+# scheduler.start()
 
 
 @app.route("/ads")
